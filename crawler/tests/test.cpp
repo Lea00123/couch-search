@@ -1,10 +1,12 @@
-#include "crawler.h"
+#include "crawler_mng.h"
 
 int main()
 {
     CrawlerConfig config("../config.json");
-    Crawler crawler(config);
+    CrawlerManager manager(config);
 
+    manager.start_crawling();
+    
 
     return 0;
 }

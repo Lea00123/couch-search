@@ -12,10 +12,20 @@ LDFLAGS = -lgumbo -lcurl -lcurlpp
 
 INCLUDES_DIR = ../inc
 SOURCES_DIR = ../src
+TEST_DIR = ../tests
 
 # Source and Object Files
-SOURCES = $(SOURCES_DIR)/crawler.cpp $(SOURCES_DIR)/crawler_config.cpp
-OBJECTS = $(SOURCES:.cpp=.o) $(SOURCES_DIR)/test.o
+SOURCES = $(SOURCES_DIR)/crawler_mng.cpp \
+          $(SOURCES_DIR)/crawler_config.cpp \
+          $(SOURCES_DIR)/bfs.cpp \
+          $(SOURCES_DIR)/crawling_base.cpp \
+          $(TEST_DIR)/test.cpp
+
+OBJECTS = $(SOURCES_DIR)/crawler_mng.o \
+          $(SOURCES_DIR)/crawler_config.o \
+          $(SOURCES_DIR)/bfs.o \
+          $(SOURCES_DIR)/crawling_base.o \
+          $(TEST_DIR)/test.o
 
 # Target Executable
 TARGET = test
@@ -30,12 +40,9 @@ $(TARGET): $(OBJECTS)
 $(SOURCES_DIR)/%.o: $(SOURCES_DIR)/%.cpp
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
 
-# Specific rule for compiling test.cpp
-$(SOURCES_DIR)/test.o: test.cpp
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $(SOURCES_DIR)/test.o
-
-check: $(TARGET)
-	@./$(TARGET) -v
+# Specific rule for compiling test.cpp in the test directory
+$(TEST_DIR)/%.o: $(TEST_DIR)/%.cpp
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
 
 clean:
 	@$(RM) $(TARGET) $(OBJECTS)

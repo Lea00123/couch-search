@@ -1,22 +1,22 @@
-#ifndef CRAWLER_H_
-#define CRAWLER_H_
+#ifndef CRAWLING_BASE_H_
+#define CRAWLING_BASE_H_
 
-#include "crawler_config.h"
 #include <gumbo.h>
-
 #include <string>
 #include <queue>
 
-class Crawler {
+class CrawlingBase {
 public:
-    Crawler(CrawlerConfig const& a_config);
+    explicit CrawlingBase(std::vector<std::string> const& start_urls);
+    virtual  ~CrawlingBase() = default;
 
     /**
      * Start the crawling process.
      */
-    void start_crawling();
+    virtual void start_crawling() = 0;
 
-private:
+
+protected:
     /**
      * Fetches the content of a given URL.
      * 
@@ -32,26 +32,22 @@ private:
      * @return A vector of strings containing the text extracted from the tags: 
      *         <P>, <H1>, <H2>, <H3>, <H4>, and <TITLE>.
      */
-    std::vector<std::string> parse_html(std::string const& html_content);
+    void parse_html(std::string const & a_html_content, std::vector<std::string>& a_words, std::vector<std::string>& a_links);
 
+private:
     /**
      * Recursively extracts text from a GumboNode and its children.
      * 
      * @param node The GumboNode to process.
      * @param words A reference to a vector of strings where the extracted text will be stored.
      */
-    void get_text(GumboNode* node, std::vector<std::string>& words);
+    void get_info(GumboNode* a_node, std::vector<std::string>& a_words, std::vector<std::string>& a_links);
 
-    void crawling_bfs();
-    void crawling_dfs();
-
-    
+    std::string extract_domain(const std::string& url);
 
 
-
-private:
-    CrawlerConfig m_config;
-    std::queue<std::string> m_queue;
+protected:
+    std::vector<std::string> m_start_urls;
 };
 
-#endif  // CRAWLER_H_
+#endif  // CRAWLING_BASE_H_
