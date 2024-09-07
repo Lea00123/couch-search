@@ -60,7 +60,20 @@
         "valarray": "cpp",
         "set": "cpp",
         "bitset": "cpp",
-        "regex": "cpp"
+        "regex": "cpp",
+        "any": "cpp",
+        "optional": "cpp",
+        "variant": "cpp",
+        "csignal": "cpp",
+        "condition_variable": "cpp",
+        "coroutine": "cpp",
+        "source_location": "cpp",
+        "future": "cpp",
+        "mutex": "cpp",
+        "semaphore": "cpp",
+        "stop_token": "cpp",
+        "thread": "cpp",
+        "typeindex": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

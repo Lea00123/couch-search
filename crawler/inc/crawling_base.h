@@ -45,9 +45,12 @@ private:
 
     std::string extract_domain(const std::string& url);
 
+    std::vector<std::string> string_to_words(const std::string& str);
+
 
 protected:
     std::vector<std::string> m_start_urls;
+    int m_ignored_links;
 };
 
 #endif  // CRAWLING_BASE_H_

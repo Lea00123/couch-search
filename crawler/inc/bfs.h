@@ -17,6 +17,7 @@ private:
 private:
     int m_max_depth;
     int m_max_pages;
+    // int m_ignored_links;
 };
 
 

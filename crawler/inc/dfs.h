@@ -9,8 +9,6 @@ public:
     Dfs(CrawlerConfig const& a_config);
     void start_crawling() override;
 
-private:
-
 
 private:
     std::vector<std::vector<int>> adjacencyist;

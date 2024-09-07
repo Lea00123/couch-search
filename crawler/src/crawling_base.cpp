@@ -1,18 +1,22 @@
 #include "crawling_base.h"
 #include "gumbo.h"
 
-#include <sstream>
 #include <curlpp/cURLpp.hpp>
 #include <curlpp/Easy.hpp>
 #include <curlpp/Options.hpp>
 #include <string>
 #include <regex>
+#include <algorithm>
+#include <sstream>   
+#include <vector>  
+#include <cctype> 
 
 
 using namespace curlpp::options;
 
 CrawlingBase::CrawlingBase(std::vector<std::string> const& start_urls)
     : m_start_urls(start_urls)
+    , m_ignored_links(0)
 {
 }
 
@@ -71,7 +75,8 @@ void CrawlingBase::get_info(GumboNode* a_node, std::vector<std::string>& a_words
         for (unsigned int i = 0; i < children->length; ++i) {
             GumboNode* child = static_cast<GumboNode*>(children->data[i]);
             if (child->type == GUMBO_NODE_TEXT && child->v.text.text) {
-                a_words.push_back(std::string(child->v.text.text));
+                std::vector<std::string> words = string_to_words(child->v.text.text);
+                a_words.insert(a_words.end(), words.begin(), words.end());
             }
         }
     } else if (tag == GUMBO_TAG_A) {
@@ -82,7 +87,9 @@ void CrawlingBase::get_info(GumboNode* a_node, std::vector<std::string>& a_words
 
             if (link_domain == start_domain) {
                 a_links.push_back(href->value);
-            } 
+            } else {
+                ++m_ignored_links;
+            }
         }
     }
    
@@ -100,6 +107,28 @@ std::string CrawlingBase::extract_domain(const std::string& url)
     if (std::regex_search(url, match, domain_regex)) {
         return match[2].str(); 
     }
+
     return "";
 }
 
+std::vector<std::string> CrawlingBase::string_to_words(const std::string& str)
+{
+    std::istringstream stream(str);
+    std::string word;
+    std::vector<std::string> words;
+
+    while (stream >> word) {
+        word.erase(std::remove_if(word.begin(), word.end(), [] (unsigned char c) { 
+            return !std::isalnum(c); }), word.end());
+
+        std::transform(word.begin(), word.end(), word.begin(), 
+                       [](unsigned char c) { return std::tolower(c); });
+
+        if (!word.empty())
+        {
+            words.push_back(word);
+        }
+    }
+
+    return words;
+}
