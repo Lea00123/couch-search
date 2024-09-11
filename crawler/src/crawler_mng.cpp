@@ -1,23 +1,22 @@
 #include "crawler_mng.h"
+#include "parser.h"
 #include "bfs.h"
 #include "dfs.h"
 
 #include <stdexcept>
 
-CrawlerManager::CrawlerManager(CrawlerConfig const& config)
-: m_config(config)
+CrawlerManager::CrawlerManager(std::string const& a_filename)
+    : m_config(CrawlerConfig(a_filename))
+    , m_parser(Parser())
 {
     create_crawler();
 }
 
 void CrawlerManager::create_crawler() {
     std::string mode = m_config.get_crawling_mode(); 
-    std::vector<std::string> start_urls = m_config.get_start_urls();  
-    int max_depth = m_config.get_max_depth();
-    int max_pages = m_config.get_max_limit_pages();
 
     if (mode == "BFS") {
-        m_crawler = std::make_unique<Bfs>(start_urls, max_depth, max_pages);
+        m_crawler = std::make_unique<Bfs>(m_config, m_parser);
     } else if (mode == "DFS") {
         // m_crawler = std::make_unique<Dfs>(start_urls);
     } else {

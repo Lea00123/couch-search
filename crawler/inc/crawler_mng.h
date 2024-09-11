@@ -3,18 +3,20 @@
 
 #include "crawler_config.h"
 #include "crawling_base.h"
+#include "parser.h"
 #include <memory>
 
 class CrawlerManager {
 public:
-    CrawlerManager(CrawlerConfig const& config);
+    CrawlerManager(std::string const& a_filename);
 
     // Starts the crawling process
     void start_crawling();
 
 private:
-    CrawlerConfig const& m_config;
+    CrawlerConfig m_config;
     std::unique_ptr<CrawlingBase> m_crawler;
+    Parser m_parser;
     
     void create_crawler();
 };

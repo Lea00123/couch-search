@@ -19,12 +19,15 @@ SOURCES = $(SOURCES_DIR)/crawler_mng.cpp \
           $(SOURCES_DIR)/crawler_config.cpp \
           $(SOURCES_DIR)/bfs.cpp \
           $(SOURCES_DIR)/crawling_base.cpp \
+          $(SOURCES_DIR)/parser.cpp \
           $(TEST_DIR)/test.cpp
+
 
 OBJECTS = $(SOURCES_DIR)/crawler_mng.o \
           $(SOURCES_DIR)/crawler_config.o \
           $(SOURCES_DIR)/bfs.o \
           $(SOURCES_DIR)/crawling_base.o \
+          $(SOURCES_DIR)/parser.o \
           $(TEST_DIR)/test.o
 
 # Target Executable

@@ -2,22 +2,24 @@
 #define BFS_H_
 
 #include "crawling_base.h"
+#include "crawler_config.h"
+#include "parser.h"
+
 #include <queue> 
 #include <vector>
 #include <set>
 
 class Bfs : public CrawlingBase {
 public:
-    Bfs(std::vector<std::string> const& start_urls, int a_maxm_depth, int a_max_pages);
+    Bfs(CrawlerConfig& a_config, Parser& a_parser);
     void start_crawling() override;
 
 private:
-    void process_url(std::string const& url, std::vector<std::string>& m_words, std::vector<std::string>& m_links);
+    void process_url(std::string const& a_url, std::vector<std::string>& a_words, std::vector<std::string>& a_links, int& a_ignored_links);
 
 private:
-    int m_max_depth;
-    int m_max_pages;
-    // int m_ignored_links;
+    CrawlerConfig& m_config;
+    Parser& m_parser;
 };
 
 

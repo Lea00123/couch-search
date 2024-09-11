@@ -2,8 +2,7 @@
 
 int main()
 {
-    CrawlerConfig config("../config.json");
-    CrawlerManager manager(config);
+    CrawlerManager manager("../config.json");
 
     manager.start_crawling();
     
