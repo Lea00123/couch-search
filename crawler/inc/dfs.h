@@ -2,17 +2,20 @@
 #define DFS_H_
 
 #include "crawling_base.h"
+
 #include <vector>
 
 class Dfs : public CrawlingBase {
 public:
-    Dfs(CrawlerConfig const& a_config);
-    void start_crawling() override;
-
+    Dfs(CrawlerConfig& a_config, Parser& a_parser);
+    CrawlerStats start_crawling() override;
 
 private:
-    std::vector<std::vector<int>> adjacencyist;
-    std::vector<bool> visited;
+    void process_url(std::string const& a_url, std::vector<std::string>& a_words, std::vector<std::string>& a_links, int& a_ignored_links);
+
+private:
+    CrawlerConfig& m_config;
+    Parser& m_parser;
 };
 
 

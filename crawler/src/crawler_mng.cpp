@@ -18,15 +18,17 @@ void CrawlerManager::create_crawler() {
     if (mode == "BFS") {
         m_crawler = std::make_unique<Bfs>(m_config, m_parser);
     } else if (mode == "DFS") {
-        // m_crawler = std::make_unique<Dfs>(start_urls);
+        m_crawler = std::make_unique<Dfs>(m_config, m_parser);
     } else {
         throw std::runtime_error("Unknown crawling mode: " + mode);
     }
 }
 
-void CrawlerManager::start_crawling()
+CrawlerStats CrawlerManager::start_crawling()
 {
     if (m_crawler) {
-        m_crawler->start_crawling();
+        return m_crawler->start_crawling();
     }
+
+    return CrawlerStats();
 }

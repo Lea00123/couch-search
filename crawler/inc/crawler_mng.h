@@ -11,7 +11,7 @@ public:
     CrawlerManager(std::string const& a_filename);
 
     // Starts the crawling process
-    void start_crawling();
+    CrawlerStats start_crawling();
 
 private:
     CrawlerConfig m_config;
@@ -22,3 +22,4 @@ private:
 };
 
 #endif // CRAWLER_MANAGER_H_
+
