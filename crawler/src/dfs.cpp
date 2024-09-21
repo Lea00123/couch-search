@@ -2,6 +2,7 @@
 #include <iostream>
 #include <stack>
 #include <set>
+#include <map>
 
 Dfs::Dfs(CrawlerConfig& a_config, Parser& a_parser)
     : CrawlingBase(a_config, a_parser)
@@ -69,17 +70,17 @@ void Dfs::process_url(std::string const& a_url, std::vector<std::string>& a_word
         return;
     }
     
-
     m_parser.parse_html(content, a_words, all_links);
+    std::map<std::string, int> links_count;
 
     for (std::string link : all_links) {
         std::string link_domain = m_parser.extract_domain(link);
 
         if (link_domain == start_domain) {
             a_links.push_back(link);
+             links_count[link]++; 
         } else {
             ++a_ignored_links;
         }
     }
-    //TODO: update url to words count and url to links count
 }
