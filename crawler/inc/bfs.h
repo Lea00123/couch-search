@@ -14,10 +14,6 @@ public:
 
 private:
     void process_url(std::string const& a_url, std::vector<std::string>& a_words, std::vector<std::string>& a_links, int& a_ignored_links);
-
-private:
-    CrawlerConfig& m_config;
-    Parser& m_parser;
 };
 
 

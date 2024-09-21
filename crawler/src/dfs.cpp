@@ -1,10 +1,10 @@
 #include "dfs.h"
 #include <iostream>
 #include <stack>
+#include <set>
 
 Dfs::Dfs(CrawlerConfig& a_config, Parser& a_parser)
-    : m_config(a_config)
-    , m_parser(a_parser)
+    : CrawlingBase(a_config, a_parser)
 {
 }
 

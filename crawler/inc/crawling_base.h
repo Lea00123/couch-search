@@ -15,8 +15,15 @@ struct CrawlerStats {
 
 class CrawlingBase  {
 public:
+    CrawlingBase(CrawlerConfig& a_config, Parser& a_parser) 
+    : m_config(a_config) ,m_parser(a_parser) {}
+
     virtual ~CrawlingBase() {}
     virtual CrawlerStats start_crawling() = 0;
+
+protected:
+    CrawlerConfig& m_config;
+    Parser& m_parser;
 };
 
 

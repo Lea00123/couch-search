@@ -10,8 +10,7 @@
 #include <queue>
 
 Bfs::Bfs(CrawlerConfig& a_config, Parser& a_parser)
-    : m_config(a_config)
-    , m_parser(a_parser)
+    : CrawlingBase(a_config, a_parser)
 {
 }
 
