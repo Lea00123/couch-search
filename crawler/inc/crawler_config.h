@@ -33,11 +33,18 @@ public:
      */
     std::string const& get_crawling_mode() const;
 
+    /**
+     * Get the database mode (SQL or FILE or Redis).
+     * @return A constant reference to the database mode string.
+     */
+    std::string const& get_database_type() const;
+
 private:
     std::vector<std::string> m_start_urls;
     int m_max_limit_pages;
     int m_max_depth;
     std::string m_crawling_mode;
+    std::string m_database_type;
 
 };
 

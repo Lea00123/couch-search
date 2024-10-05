@@ -2,5 +2,6 @@
     "start_urls": ["https://harrypotter.fandom.com/wiki/Main_Page"],
     "max_depth": 2,
     "max_pages": 1000,
-    "crawl_mode": "DFS"
+    "crawl_mode": "DFS",
+    "data_base": "FILE"
 }

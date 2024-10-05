@@ -20,7 +20,8 @@ SOURCES = $(SOURCES_DIR)/crawler_mng.cpp \
           $(SOURCES_DIR)/bfs.cpp \
           $(SOURCES_DIR)/dfs.cpp \
           $(SOURCES_DIR)/crawling_base.cpp \
-          $(SOURCES_DIR)/crawler_db.cpp \
+          $(SOURCES_DIR)/crawler_db_base.cpp \
+          $(SOURCES_DIR)/crawler_db_file.cpp \
           $(SOURCES_DIR)/parser.cpp \
           $(TEST_DIR)/test.cpp
 
@@ -29,7 +30,8 @@ OBJECTS = $(SOURCES_DIR)/crawler_mng.o \
           $(SOURCES_DIR)/bfs.o \
           $(SOURCES_DIR)/dfs.o \
           $(SOURCES_DIR)/crawling_base.o \
-          $(SOURCES_DIR)/crawler_db.o \
+          $(SOURCES_DIR)/crawler_db_base.o \
+          $(SOURCES_DIR)/crawler_db_file.o \
           $(SOURCES_DIR)/parser.o \
           $(TEST_DIR)/test.o
 

@@ -1,5 +1,7 @@
 #include "crawler_mng.h"
-#include "crawler_db.h"
+#include "crawler_db_base.h"
+#include "crawler_db_file.h"
+#include "crawler_db_sql.h"
 #include <gtest/gtest.h>
 #include <fstream>
 #include <cstdio>
@@ -24,9 +26,8 @@ void print_map(const std::map<std::string, std::map<std::string, int>>& data_map
 }
 
 
-
 // Tests    
-TEST(CrawlerTest, TestCrawlerBFSWords) {
+TEST(CrawlerTest, TestCrawlerBFSWordsFile) {
     CrawlerManager manager_bfs("../config_test_bfs.json");
     std::string filename_link = "/tmp/links.txt";
     std::string filename_word = "/tmp/words.txt";
@@ -36,7 +37,7 @@ TEST(CrawlerTest, TestCrawlerBFSWords) {
 
     CrawlerStats statistic_bfs = manager_bfs.start_crawling();
 
-    CrawlerDB& db = CrawlerDB::get_instance();
+    CrawlerDBBase& db  = CrawlerDBFile::get_instance();
     std::map<std::string, std::map<std::string, int>> result_words_map = db.get_words_map();
 
     // Define expected results for testing
@@ -71,7 +72,7 @@ TEST(CrawlerTest, TestCrawlerDFSWords) {
     remove_if_file_exists(filename_link);
     remove_if_file_exists(filename_word);
 
-    CrawlerDB& db = CrawlerDB::get_instance();
+    CrawlerDBBase& db  = CrawlerDBFile::get_instance();
     std::map<std::string, std::map<std::string, int>> result_words_map = db.get_words_map();
 
     // Define expected results for testing
@@ -106,7 +107,7 @@ TEST(CrawlerTest, TestCrawlerBFSLinks) {
 
     manager_links.start_crawling();
 
-    CrawlerDB& db = CrawlerDB::get_instance();
+    CrawlerDBBase& db  = CrawlerDBFile::get_instance();
     std::map<std::string, std::map<std::string, int>> result_links_map = db.get_links_map();
 
     // Define expected results for testing
@@ -149,7 +150,7 @@ TEST(CrawlerTest, TestCrawlerDFSLinks) {
 
     manager_links.start_crawling();
 
-    CrawlerDB& db = CrawlerDB::get_instance();
+    CrawlerDBBase& db  = CrawlerDBFile::get_instance();
     std::map<std::string, std::map<std::string, int>> result_links_map = db.get_links_map();
 
     // Define expected results for testing
@@ -201,7 +202,7 @@ TEST(CrawlerDBTest, TestDBWriteAndRead) {
     remove_if_file_exists(filename_link);
     remove_if_file_exists(filename_word);
     
-    CrawlerDB& db = CrawlerDB::get_instance();
+    CrawlerDBBase& db  = CrawlerDBFile::get_instance();
     db.read_DB();
 
 

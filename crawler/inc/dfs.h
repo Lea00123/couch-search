@@ -4,14 +4,14 @@
 #include "crawling_base.h"
 #include "crawler_config.h"  
 #include "parser.h"        
-#include "crawler_db.h"      
+#include "crawler_db_base.h"      
 
 #include <vector>
 #include <string>
 
 class Dfs : public CrawlingBase {
 public:
-    Dfs(CrawlerConfig& a_config, Parser& a_parser, CrawlerDB& a_crawler_db);
+    Dfs(CrawlerConfig& a_config, Parser& a_parser, CrawlerDBBase* a_crawler_db);
     CrawlerStats start_crawling() override;
 
 private:

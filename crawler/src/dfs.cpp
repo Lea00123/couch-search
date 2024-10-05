@@ -4,8 +4,8 @@
 #include <set>
 #include <map>
 
-Dfs::Dfs(CrawlerConfig& a_config, Parser& a_parser, CrawlerDB& a_crawler_db)
-    : CrawlingBase(a_config, a_parser, a_crawler_db)
+Dfs::Dfs(CrawlerConfig& a_config, Parser& a_parser, CrawlerDBBase* a_crawler_db)
+    : CrawlingBase(a_config, a_parser, *a_crawler_db)
 {
 }
 

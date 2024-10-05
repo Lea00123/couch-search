@@ -21,6 +21,7 @@ CrawlerConfig::CrawlerConfig(std::string const& a_config_file_path)
     m_max_depth = data["max_depth"].get<int>();
     m_max_limit_pages = data["max_pages"].get<int>();
     m_crawling_mode = data["crawl_mode"].get<std::string>();
+    m_database_type = data["data_base"].get<std::string>();
 }
 
 std::vector<std::string> const& CrawlerConfig::get_start_urls() const
@@ -42,4 +43,11 @@ std::string const& CrawlerConfig::get_crawling_mode() const
 {
     return m_crawling_mode;
 }
+
+std::string const& CrawlerConfig::get_database_type() const
+{
+    return m_database_type;
+}
+
+
 
