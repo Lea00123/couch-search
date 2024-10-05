@@ -3,10 +3,16 @@
 #include <fstream>
 
 
-CrawlerDB::CrawlerDB(const std::string& a_database_links, const std::string& a_database_words)
-    : m_database_links(a_database_links), m_database_words(a_database_words)
+CrawlerDB::CrawlerDB()
+    : m_database_links("/tmp/links.txt"), m_database_words("/tmp/words.txt")
 {
     read_DB();
+}
+
+CrawlerDB& CrawlerDB::get_instance() 
+{
+    static CrawlerDB instance;
+    return instance;
 }
 
 void CrawlerDB::write_DB() 
@@ -18,6 +24,8 @@ void CrawlerDB::write_DB()
 
 void CrawlerDB::read_DB() 
 {
+    m_links_map.clear();
+    m_words_map.clear();
     read_map_from_file(m_database_links, m_links_map);
     read_map_from_file(m_database_words, m_words_map);
 }
@@ -79,13 +87,12 @@ void CrawlerDB::read_map_from_file(const std::string& a_filename, std::map<std::
     std::ifstream inFile(a_filename);
 
     if (!inFile) {
-        std::cerr << "Error opening file for reading: " << a_filename << std::endl;
         return;
     }
 
     std::string key;
     while (std::getline(inFile, key)) {
-        std::map<std::string, int> inner_map;
+        std::map<std::string, int> inner_map;   
         std::string line;
 
         // Read the inner map until the next key or EOF
@@ -102,4 +109,4 @@ void CrawlerDB::read_map_from_file(const std::string& a_filename, std::map<std::
     }
 
     inFile.close();
-}
+}   

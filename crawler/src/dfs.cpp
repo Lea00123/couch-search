@@ -4,8 +4,8 @@
 #include <set>
 #include <map>
 
-Dfs::Dfs(CrawlerConfig& a_config, Parser& a_parser)
-    : CrawlingBase(a_config, a_parser)
+Dfs::Dfs(CrawlerConfig& a_config, Parser& a_parser, CrawlerDB& a_crawler_db)
+    : CrawlingBase(a_config, a_parser, a_crawler_db)
 {
 }
 
@@ -25,7 +25,7 @@ CrawlerStats Dfs::start_crawling()
 
     while (!url_stack.empty()) {
     
-        //stop if we reached the max number of pages
+        // Stop if we reached the max number of pages
         if (max_pages > 0 && statistic.m_pages_crawled >= max_pages) {
             break;
         }
@@ -40,10 +40,22 @@ CrawlerStats Dfs::start_crawling()
         std::vector<std::string> words;
         std::vector<std::string> links;
 
+        // Process the current URL
         process_url(current_url, words, links, statistic.m_ignored_links);
+        
         ++statistic.m_pages_crawled;
+
+        // Update total words count
         statistic.m_total_words += words.size();
 
+        // Count word occurrences and update the database
+        std::map<std::string, int> word_count;
+        for (const auto& word : words) {
+            word_count[word]++;
+        }
+        m_crawler_db.update_words_map(current_url, word_count);
+
+        // Push relevant links onto the stack for further crawling
         for (const auto& link : links) {
             if (visited.find(link) == visited.end()) {
                 visited.insert(link);
@@ -57,6 +69,7 @@ CrawlerStats Dfs::start_crawling()
     std::cout << "Total pages crawled: " << statistic.m_pages_crawled << std::endl;
     std::cout << "Total ignored links: " << statistic.m_ignored_links << std::endl;
 
+    m_crawler_db.write_DB();
     return statistic;
 }
 
@@ -70,6 +83,7 @@ void Dfs::process_url(std::string const& a_url, std::vector<std::string>& a_word
         return;
     }
     
+    // Parse the HTML content to extract words and all links
     m_parser.parse_html(content, a_words, all_links);
     std::map<std::string, int> links_count;
 
@@ -78,9 +92,12 @@ void Dfs::process_url(std::string const& a_url, std::vector<std::string>& a_word
 
         if (link_domain == start_domain) {
             a_links.push_back(link);
-             links_count[link]++; 
+            links_count[link]++;
         } else {
             ++a_ignored_links;
         }
     }
+
+    // Update the links map in CrawlerDB after processing all links
+    m_crawler_db.update_links_map(a_url, links_count);
 }

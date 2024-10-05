@@ -9,7 +9,7 @@
 
 class Bfs : public CrawlingBase {
 public:
-    Bfs(CrawlerConfig& a_config, Parser& a_parser);
+    Bfs(CrawlerConfig& a_config, Parser& a_parser, CrawlerDB& a_crawler_db);
     CrawlerStats start_crawling() override;
 
 private:

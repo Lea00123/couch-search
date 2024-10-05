@@ -1,16 +1,15 @@
 #include "bfs.h"
 #include "crawler_config.h"
 #include "parser.h"
-
-
 #include <iostream>
-#include <gumbo.h>
 #include <algorithm>
 #include <cctype>
 #include <queue>
+#include <map>
+#include <set>
 
-Bfs::Bfs(CrawlerConfig& a_config, Parser& a_parser)
-    : CrawlingBase(a_config, a_parser)
+Bfs::Bfs(CrawlerConfig& a_config, Parser& a_parser, CrawlerDB& a_crawler_db)
+    : CrawlingBase(a_config, a_parser, a_crawler_db)
 {
 }
 
@@ -20,6 +19,7 @@ CrawlerStats Bfs::start_crawling()
     std::set<std::string> visited;
     CrawlerStats statistic;
 
+    // Initialize the queue with start URLs and mark them as visited
     for (const auto& url : m_config.get_start_urls()) {
         url_queue.push({url, 0});
         visited.insert(url);
@@ -30,7 +30,7 @@ CrawlerStats Bfs::start_crawling()
 
     while (!url_queue.empty()) {
         
-        //stop if we reached the max number of pages
+        // Stop if we reached the max number of pages
         if (max_pages > 0 && statistic.m_pages_crawled >= max_pages) {
             break;
         }
@@ -45,10 +45,22 @@ CrawlerStats Bfs::start_crawling()
         std::vector<std::string> words;
         std::vector<std::string> links;
 
+        // Process the current URL
         process_url(current_url, words, links, statistic.m_ignored_links);
+        
         ++statistic.m_pages_crawled;
+
+        // Update total words count
         statistic.m_total_words += words.size();
 
+        // Count word occurrences and update the database
+        std::map<std::string, int> word_count;
+        for (const auto& word : words) {
+            word_count[word]++;
+        }
+        m_crawler_db.update_words_map(current_url, word_count);
+
+        // Push relevant links onto the queue for further crawling
         for (const auto& link : links) {
             if (visited.find(link) == visited.end()) {
                 visited.insert(link);
@@ -62,6 +74,7 @@ CrawlerStats Bfs::start_crawling()
     std::cout << "Total pages crawled: " << statistic.m_pages_crawled << std::endl;
     std::cout << "Total ignored links: " << statistic.m_ignored_links << std::endl;
 
+    m_crawler_db.write_DB();
     return statistic;
 }
 
@@ -75,36 +88,21 @@ void Bfs::process_url(std::string const& a_url, std::vector<std::string>& a_word
         return;
     }
     
-
+    // Parse the HTML content to extract words and all links
     m_parser.parse_html(content, a_words, all_links);
+    std::map<std::string, int> links_count;
 
     for (std::string link : all_links) {
         std::string link_domain = m_parser.extract_domain(link);
 
         if (link_domain == start_domain) {
             a_links.push_back(link);
+            links_count[link]++;
         } else {
             ++a_ignored_links;
         }
     }
-    //TODO: update url to words count and url to links count
+
+    // Update the links map in CrawlerDB after processing all links
+    m_crawler_db.update_links_map(a_url, links_count);
 }
-
-
-// void Bfs::extract_words(std::string const& a_words)
-// {
-//     std::string word;
-//     for (std::string word : content) {
-//         if (std::isalnum(c)) {
-//             word += std::tolower(c);
-//         } else if (!word.empty()) {
-//             ++m_word_count[word];
-//             word.clear();
-//         }
-//     }
-//     if (!word.empty()) {
-//         ++m_word_count[word];
-//     }
-// }
-
-

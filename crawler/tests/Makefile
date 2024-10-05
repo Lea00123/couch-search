@@ -1,14 +1,14 @@
 CXX = g++
 CC = $(CXX)
 
-CXXFLAGS = -pedantic -Wall -Werror
-CXXFLAGS += -g3
-CXXFLAGS += -std=c++17
+CXXFLAGS = -pedantic -Wall -Werror \
+           -g3 \
+           -std=c++17
 
-CPPFLAGS = -DDEBUG
-CPPFLAGS += -I$(INCLUDES_DIR)
+CPPFLAGS = -DDEBUG \
+           -I$(INCLUDES_DIR)
 
-LDFLAGS = -lgumbo -lcurl -lcurlpp
+LDFLAGS = -lgumbo -lcurl -lcurlpp -lgtest -lgtest_main
 
 INCLUDES_DIR = ../inc
 SOURCES_DIR = ../src
@@ -23,7 +23,6 @@ SOURCES = $(SOURCES_DIR)/crawler_mng.cpp \
           $(SOURCES_DIR)/crawler_db.cpp \
           $(SOURCES_DIR)/parser.cpp \
           $(TEST_DIR)/test.cpp
-
 
 OBJECTS = $(SOURCES_DIR)/crawler_mng.o \
           $(SOURCES_DIR)/crawler_config.o \

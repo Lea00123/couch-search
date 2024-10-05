@@ -14,11 +14,12 @@ CrawlerManager::CrawlerManager(std::string const& a_filename)
 
 void CrawlerManager::create_crawler() {
     std::string mode = m_config.get_crawling_mode(); 
+    CrawlerDB& crawler_db = CrawlerDB::get_instance();
 
     if (mode == "BFS") {
-        m_crawler = std::make_unique<Bfs>(m_config, m_parser);
+        m_crawler = std::make_unique<Bfs>(m_config, m_parser, crawler_db);
     } else if (mode == "DFS") {
-        m_crawler = std::make_unique<Dfs>(m_config, m_parser);
+        m_crawler = std::make_unique<Dfs>(m_config, m_parser, crawler_db);
     } else {
         throw std::runtime_error("Unknown crawling mode: " + mode);
     }
