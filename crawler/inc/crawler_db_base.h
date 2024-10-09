@@ -7,7 +7,7 @@
 
 class CrawlerDBBase {
 public:
-    virtual ~CrawlerDBBase() {}
+    virtual ~CrawlerDBBase() = default; // Using default virtual destructor
 
     /**
      * Read the database and initialize the internal maps.

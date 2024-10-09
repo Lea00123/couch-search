@@ -6,9 +6,10 @@ CXXFLAGS = -pedantic -Wall -Werror \
            -std=c++17
 
 CPPFLAGS = -DDEBUG \
-           -I$(INCLUDES_DIR)
+           -I$(INCLUDES_DIR) \
+           -I/usr/include/mysql-cppconn/jdbc
 
-LDFLAGS = -lgumbo -lcurl -lcurlpp -lgtest -lgtest_main
+LDFLAGS = -lgumbo -lcurl -lcurlpp -lgtest -lgtest_main -lmysqlcppconn
 
 INCLUDES_DIR = ../inc
 SOURCES_DIR = ../src
@@ -22,6 +23,7 @@ SOURCES = $(SOURCES_DIR)/crawler_mng.cpp \
           $(SOURCES_DIR)/crawling_base.cpp \
           $(SOURCES_DIR)/crawler_db_base.cpp \
           $(SOURCES_DIR)/crawler_db_file.cpp \
+          $(SOURCES_DIR)/crawler_db_sql.cpp \
           $(SOURCES_DIR)/parser.cpp \
           $(TEST_DIR)/test.cpp
 
@@ -32,6 +34,7 @@ OBJECTS = $(SOURCES_DIR)/crawler_mng.o \
           $(SOURCES_DIR)/crawling_base.o \
           $(SOURCES_DIR)/crawler_db_base.o \
           $(SOURCES_DIR)/crawler_db_file.o \
+          $(SOURCES_DIR)/crawler_db_sql.o \
           $(SOURCES_DIR)/parser.o \
           $(TEST_DIR)/test.o
 

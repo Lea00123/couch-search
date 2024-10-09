@@ -1,29 +1,38 @@
-// crawler_db_sql.h
 #ifndef CRAWLER_DB_SQL_H_
 #define CRAWLER_DB_SQL_H_
 
 #include "crawler_db_base.h"
+#include <mysql_driver.h>
+#include <mysql_connection.h>
+#include <cppconn/prepared_statement.h>
+#include <cppconn/resultset.h>
 #include <map>
-#include <memory>
 #include <string>
 #include <vector>
+#include <stdexcept>
+#include <iostream>
 
-class MockMYSQL;  // Forward declaration of your mock database class
-
-class CrawlerDBSQL : public CrawlerDBBase {
+class CrawlerDBMySQL : public CrawlerDBBase {
 public:
-    CrawlerDBSQL(const std::string& a_connection_string);
-    ~CrawlerDBSQL() override;
+    CrawlerDBMySQL();
+    virtual ~CrawlerDBMySQL();
 
-    void read_DB() override;
-    // Missing update_links_map method implementation
-    void update_words_map(const std::string& a_word, const std::map<std::string, int>& a_urls_count) override;
-    void write_DB() override;
-    bool is_visited(const std::string& url) const override;
-    std::map<std::string, std::map<std::string, int>> get_links_map() const override;
-    std::map<std::string, std::map<std::string, int>> get_words_map() const override;
-    std::vector<std::string> get_query_results(const std::string& query, int max_url) const override;
+    void read_DB();
+    void write_DB();
+    void populate_map(const std::string& query, const std::string& a_key,
+                      const std::string& a_first_value, const std::string& a_second_value_count,
+                      std::map<std::string, std::map<std::string, int>>& map);
+    void write_links_to_DB(const std::map<std::string, std::map<std::string, int>>& map);
+    void write_to_DB(const std::map<std::string, std::map<std::string, int>>& map,
+                     const std::string& table_name, const std::string& key_column, const std::string& value_column);
+    
+    // Declare member variables
+    sql::mysql::MySQL_Driver* driver; // Add this line
+    sql::Connection* con; 
+    std::map<std::string, std::map<std::string, int>> m_links_map;
+    std::map<std::string, std::map<std::string, int>> m_words_map;
 };
+
 
 
 #endif  // CRAWLER_DB_SQL_H_
